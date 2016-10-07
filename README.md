@@ -16,8 +16,11 @@ It bundles all the dependencies using maven.
 NB: 111111 is the account id for the default/universal account used in this test
 
 Steps to run 2
+
 1. Clone the project into an IDE (Eclipse/Intellij etc)
+
 2. Run the EntryPoint BankApplication.java..this spawns the necessary bootstrapping to setup the server running on http://localhost:8080/api/...
+
 3. To test the end points, open up postmaster or any other rest client and access the following endpoints
       balance(GET): http://localhost:8080/api/111111/balance
       deposit(POST): http://localhost:8080/api/111111/deposit       URL Params : amount=1000 or any value
