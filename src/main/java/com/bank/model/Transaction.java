@@ -15,7 +15,7 @@ import java.util.Date;
 @Entity
 @Table(name = "account_transaction")
 public class Transaction {
-    public enum Type { DEPOSIT, WITHDRAWAL }
+    public static enum Type { DEPOSIT, WITHDRAWAL }
 
     public int getId() {
         return id;

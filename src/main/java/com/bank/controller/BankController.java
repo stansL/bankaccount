@@ -1,5 +1,9 @@
 package com.bank.controller;
 
+import com.bank.exceptions.ApiError;
+import com.bank.model.BalanceInfo;
+import com.bank.model.DepositInfo;
+import com.bank.model.WithdrawalInfo;
 import com.bank.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -42,127 +46,5 @@ public class BankController {
         }
     }
 
-    public class BalanceInfo {
-        String account;
-        double balance;
-
-        public BalanceInfo(String account, double balance) {
-            this.account = account;
-            this.balance = balance;
-        }
-
-        public String getAccount() {
-            return account;
-        }
-
-        public void setAccount(String account) {
-            this.account = account;
-        }
-
-        public double getBalance() {
-            return balance;
-        }
-
-        public void setBalance(double balance) {
-            this.balance = balance;
-        }
-    }
-
-    public class DepositInfo {
-        String account;
-        double deposit;
-        double balance;
-
-        public DepositInfo(String account, double deposit, double balance) {
-            this.account = account;
-            this.deposit = deposit;
-            this.balance = balance;
-        }
-
-        public String getAccount() {
-            return account;
-        }
-
-        public void setAccount(String account) {
-            this.account = account;
-        }
-
-        public double getDeposit() {
-            return deposit;
-        }
-
-        public void setDeposit(double deposit) {
-            this.deposit = deposit;
-        }
-
-        public double getBalance() {
-            return balance;
-        }
-
-        public void setBalance(double balance) {
-            this.balance = balance;
-        }
-    }
-
-    public class WithdrawalInfo {
-        String account;
-        double withdrawn;
-        double balance;
-
-        public WithdrawalInfo(String account, double withdrawn, double balance) {
-            this.account = account;
-            this.withdrawn = withdrawn;
-            this.balance = balance;
-        }
-
-        public String getAccount() {
-            return account;
-        }
-
-        public void setAccount(String account) {
-            this.account = account;
-        }
-
-        public double getWithdrawn() {
-            return withdrawn;
-        }
-
-        public void setWithdrawn(double withdrawn) {
-            this.withdrawn = withdrawn;
-        }
-
-        public double getBalance() {
-            return balance;
-        }
-
-        public void setBalance(double balance) {
-            this.balance = balance;
-        }
-    }
-    public class ApiError {
-
-        private HttpStatus status;
-        private String message;
-
-        public ApiError(HttpStatus status, String message) {
-            this.status = status;
-            this.message = message;
-        }
-
-        public HttpStatus getStatus() {
-            return status;
-        }
-
-        public void setStatus(HttpStatus status) {
-            this.status = status;
-        }
-
-        public String getMessage() {
-            return message;
-        }
-
-        public void setMessage(String message) {
-            this.message = message;
-        }
-    }
+  
 }

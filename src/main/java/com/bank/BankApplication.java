@@ -1,6 +1,5 @@
 package com.bank;
 
-import com.bank.service.AccountService;
 import org.hibernate.SessionFactory;
 import org.hibernate.jpa.HibernateEntityManagerFactory;
 import org.springframework.boot.SpringApplication;
