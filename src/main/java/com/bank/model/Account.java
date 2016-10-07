@@ -4,7 +4,12 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-
+/**
+ * 
+ * @author Stanslaus Odhiambo
+ * Model Entity class for the account table holding the default Account
+ *
+ */
 @Entity
 @Table
 public class Account {

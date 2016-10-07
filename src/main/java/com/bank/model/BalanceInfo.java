@@ -1,5 +1,11 @@
 package com.bank.model;
 
+/**
+ * 
+ * @author Stanslaus Odhiambo
+ * Model class for the account balance infrmation
+ *
+ */
 public class BalanceInfo {
     String account;
     double balance;

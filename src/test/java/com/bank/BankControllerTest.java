@@ -19,6 +19,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.bank.model.Account;
+import com.bank.model.DepositInfo;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -36,6 +37,7 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppC
 /**
  * 
  * @author Stanslaus Odhiambo
+ * Skeleton Test implementation for the Bank Account service endpoints
  *
  */
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -74,13 +76,19 @@ public class BankControllerTest {
     }
     
     @Test
-    public void readSingleBookmark() throws Exception {
+    public void readBalance() throws Exception {
         mockMvc.perform(get("/api/" + accountId + "/balance/"))
                 .andExpect(status().isOk())
-                .andExpect(content().contentType(contentType));
-//                .andExpect(jsonPath("$.id", is(this.bookmarkList.get(0).getId().intValue())))
-//                .andExpect(jsonPath("$.uri", is("http://bookmark.com/1/" + userName)))
-//                .andExpect(jsonPath("$.description", is("A description")));
+                .andExpect(content().contentType(contentType))
+                .andExpect(jsonPath("$.balance", is(100.0)));
+    }
+    
+    
+    protected String json(Object o) throws IOException {
+        MockHttpOutputMessage mockHttpOutputMessage = new MockHttpOutputMessage();
+        this.mappingJackson2HttpMessageConverter.write(
+                o, MediaType.APPLICATION_JSON, mockHttpOutputMessage);
+        return mockHttpOutputMessage.getBodyAsString();
     }
 
 

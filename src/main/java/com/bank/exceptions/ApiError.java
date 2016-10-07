@@ -1,7 +1,12 @@
 package com.bank.exceptions;
 
 import org.springframework.http.HttpStatus;
-
+/**
+ * 
+ * @author Stanslaus Odhiambo
+ * Minified Error model
+ *
+ */
 public class ApiError {
 
     private HttpStatus status;

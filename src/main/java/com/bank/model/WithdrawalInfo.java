@@ -1,4 +1,10 @@
 package com.bank.model;
+/**
+ * 
+ * @author Stanslaus Odhiambo
+ * Model class for the withdrawal transaction
+ *
+ */
 
 public class WithdrawalInfo {
     String account;

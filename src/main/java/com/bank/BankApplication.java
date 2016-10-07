@@ -6,6 +6,12 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
+/**
+ * 
+ * @author Stanslaus Odhiambo
+ * Entry point to the Spring Boot REST Application
+ *
+ */
 @SpringBootApplication
 public class BankApplication {
     @Bean

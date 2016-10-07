@@ -1,5 +1,11 @@
 package com.bank.model;
 
+/**
+ * 
+ * @author Stanslaus Odhiambo
+ * Model class for the Deposit transaction information
+ *
+ */
 public class DepositInfo {
     String account;
     double deposit;
@@ -10,7 +16,12 @@ public class DepositInfo {
         this.deposit = deposit;
         this.balance = balance;
     }
-
+    
+    public DepositInfo(String account, double deposit) {
+        this.account = account;
+        this.deposit = deposit;
+    }
+    
     public String getAccount() {
         return account;
     }

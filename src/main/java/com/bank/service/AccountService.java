@@ -1,120 +1,54 @@
 package com.bank.service;
 
-import com.bank.model.Account;
 import com.bank.model.Transaction;
-import org.hibernate.SessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.util.List;
+/**
+ * 
+ * @author Stanslaus Odhiambo Interface declaring service methods to be
+ *         implemented by a contract with the service impl
+ *
+ */
+public interface AccountService {
 
-@Service
-@Transactional
-public class AccountService {
+	/**
+	 * gets the balance for an account with the given id
+	 * 
+	 * @param number
+	 *            - id number of the account
+	 * @return account balanc, throws an error if given account does not exist
+	 */
+	double getBalance(String number);
 
-	public static final int MAX_DEPOSIT_PER_TRANSACTION = 40000;
-	public static final int MAX_DEPOSIT_PER_DAY = 150000;
-	public static final int MAX_WITHDRAWAL_PER_TRANSACTION = 20000;
-	public static final int MAX_WITHDRAWAL_PER_DAY = 50000;
-	public static final int MAX_WITHDRAWAL_FREQUENCY = 3;
-	public static final int MAX_DEPOSIT_FREQUENCY = 4;
-	@Autowired
-	private SessionFactory sessionFactory;
+	/**
+	 * defines the logic for the deposit of an amount into a given account, tracks that the amounts are within the allowed
+	 * range and that the maximum deposit frequency has not been surpassed
+	 * @param number - account id
+	 * @param amount - amount to be deposited
+	 * @return balance after deposit
+	 */
+	double deposit(String number, double amount);
 
-	public double getBalance(String number) {
-		List<Account> accounts = sessionFactory.getCurrentSession()
-				.createQuery("from Account where account_number = :number").setParameter("number", number).list();
-		if (accounts == null || accounts.size() == 0) {
-			throw new NullPointerException("No account with number: " + number + " found.");
-		}
-		return accounts.get(0).getBalance();
-	}
+	/**
+	 * defines the logic for the withdrawal of an amount into a given account, tracks that the amounts are within the allowed
+	 * range and that the maximum withdrawal frequency has not been surpassed
+	 * @param number - account id
+	 * @param amount - amount to be deposited
+	 * @return balance after withdrawal
+	 */
+	double withdraw(String number, double amount);
 
-	public double deposit(String number, double amount) {
-		if (amount > MAX_DEPOSIT_PER_TRANSACTION) {
-			throw new IllegalArgumentException("Exceeded Maximum deposit for transaction.");
-		}
-		if (getTransactionFrequenciesToday(Transaction.Type.DEPOSIT) >= MAX_DEPOSIT_FREQUENCY) {
-			throw new RuntimeException("Exceeded Maximum withdrawal for the day.");
-		}
-		if (getAmountTransactedTodayByType(Transaction.Type.DEPOSIT) > MAX_DEPOSIT_PER_DAY) {
-			throw new RuntimeException("Exceeded Maximum deposit for the day.");
-		}
-		sessionFactory.getCurrentSession()
-				.createQuery("update Account set balance = balance + :amount where account_number = :number")
-				.setParameter("amount", amount).setParameter("number", number).executeUpdate();
-		Account account = getAccount(number);
-		Transaction.Type transactionType = Transaction.Type.DEPOSIT;
-		generateTransaction(amount, account, transactionType);
-		return account.getBalance();
-	}
+	/**
+	 * Finds the cumulative amounts already transacted to day by TransactionType
+	 * @param transactionType - type of transaction
+	 * @return - amount transacted thus far
+	 */
+	double getAmountTransactedTodayByType(Transaction.Type transactionType);
 
-	public double withdraw(String number, double amount) {
-		if (amount > MAX_WITHDRAWAL_PER_TRANSACTION) {
-			throw new IllegalArgumentException("Exceeded Maximum withdrawal for transaction.");
-		}
-		if (getTransactionFrequenciesToday(Transaction.Type.WITHDRAWAL) >= MAX_WITHDRAWAL_FREQUENCY) {
-			throw new RuntimeException("Exceeded Maximum withdrawal for the day.");
-		}
-		
-		if (getAmountTransactedTodayByType(Transaction.Type.WITHDRAWAL) > MAX_WITHDRAWAL_PER_DAY) {
-			throw new RuntimeException("Exceeded Maximum withdrawal for the day.");
-		}
-		
-		sessionFactory.getCurrentSession()
-				.createQuery("update Account set balance = balance - :amount where account_number = :number")
-				.setParameter("amount", amount).setParameter("number", number).executeUpdate();
-		Account account = getAccount(number);
-		Transaction.Type transactionType = Transaction.Type.WITHDRAWAL;
-		generateTransaction(amount, account, transactionType);
-		return account.getBalance();
-	}
+	/**
+	 * Gets the transaction frequency for the day by type
+	 * @param transactionType - type oof transaction type to investigate(withdraw/deposit)
+	 * @return
+	 */
+	long getTransactionFrequenciesToday(Transaction.Type transactionType);
 
-	public double getAmountTransactedTodayByType(Transaction.Type transactionType) {
-		LocalTime midnight = LocalTime.MIDNIGHT;
-		LocalDateTime today = LocalDateTime.of(LocalDate.now(), midnight);
-		Object result = sessionFactory.getCurrentSession()
-				.createQuery("select sum(amount) from Transaction where type =:transactionType and date > :today")
-				.setParameter("transactionType", transactionType)
-				.setParameter("today", today).uniqueResult();
-		if (result == null) {
-			return 0;
-		}
-		return (double) result;
-	}
-
-
-	public long getTransactionFrequenciesToday(Transaction.Type transactionType) {
-		LocalTime midnight = LocalTime.MIDNIGHT;
-		LocalDateTime today = LocalDateTime.of(LocalDate.now(), midnight);
-		Object result = sessionFactory.getCurrentSession()
-				.createQuery("select count(id) from Transaction where type =:transactionType  and date > :today")
-				.setParameter("transactionType", transactionType).setParameter("today", today).uniqueResult();
-		if (result == null) {
-			return 0;
-		}
-		return (long) result;
-	}
-
-	private Account getAccount(String number) {
-		List<Account> accounts = sessionFactory.getCurrentSession()
-				.createQuery("from Account where account_number = :number").setParameter("number", number).list();
-		if (accounts == null || accounts.size() == 0) {
-			throw new NullPointerException("No account with number: " + number + " found.");
-		}
-		return accounts.get(0);
-	}
-
-	private void generateTransaction(double amount, Account account, Transaction.Type transactionType) {
-		Transaction transaction = new Transaction();
-		transaction.setAccount(account);
-		transaction.setAmount(amount);
-		transaction.setType(transactionType);
-		transaction.setDate(LocalDateTime.now());
-		sessionFactory.getCurrentSession().save(transaction);
-	}
 }
