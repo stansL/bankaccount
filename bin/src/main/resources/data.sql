@@ -1,0 +1,1 @@
+INSERT INTO account (account_number, balance) VALUES ('111111', 100)
